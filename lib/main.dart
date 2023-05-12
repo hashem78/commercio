@@ -73,6 +73,7 @@ class MyApp extends ConsumerWidget {
       designSize: const Size(1080, 2340),
       builder: (context, _) {
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           routerConfig: router,
           locale: translations.locale.flutterLocale,
           supportedLocales: AppLocale.values.map((e) => e.flutterLocale),
@@ -84,8 +85,8 @@ class MyApp extends ConsumerWidget {
             ),
             FormBuilderLocalizations.delegate,
           ],
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          theme: ThemeData.light().copyWith(useMaterial3: true),
+          darkTheme: ThemeData.dark().copyWith(useMaterial3: true),
           themeMode: themeState.flutterThemeMode,
         );
       },

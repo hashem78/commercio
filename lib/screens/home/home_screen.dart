@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:commercio/screens/shared/drawer/drawer.dart';
+import 'package:commercio/state/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,15 +8,10 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider);
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            await FirebaseAuth.instance.signOut();
-          },
-          child: const Text('Log out'),
-        ),
-      ),
+      appBar: AppBar(),
+      drawer: SDrawer(user: user),
     );
   }
 }
