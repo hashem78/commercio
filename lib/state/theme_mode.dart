@@ -14,7 +14,6 @@ class SThemeModeNotifier extends StateNotifier<SThemeMode> {
     final window = WidgetsBinding.instance.platformDispatcher;
     window.onPlatformBrightnessChanged = () {
       WidgetsBinding.instance.handlePlatformBrightnessChanged();
-      print('Platform brightness changed!');
       // We ignore the const here because const instances are all the same
       // And since rebuilds happen on state changes, the new state has to be
       // non const for a rebuild to happen.

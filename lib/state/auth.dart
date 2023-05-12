@@ -43,9 +43,6 @@ class AuthNotifier extends StateNotifier<SUser> {
             await db.doc('users/${event.uid}').set(user.toJson());
             state = user;
           }
-
-          print('here');
-          print(state);
           ref.read(routerProvider).pushReplacement('/');
 
           psubscription?.cancel();
@@ -63,7 +60,6 @@ class AuthNotifier extends StateNotifier<SUser> {
             },
           );
         } else {
-          print('auth listener signed out');
           state = const SUser();
           ref.read(routerProvider).pushReplacementNamed('login');
         }
