@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          explicit_to_json: true
+      slang_build_runner:
+        options:
+          namespaces: true
+          input_directory: lib/i18n
+          output_directory: lib/i18n
+          output_file_name: translations.g.dart
+          locale_handling: false
+          translation_class_visibility: public
+          flat_map: true

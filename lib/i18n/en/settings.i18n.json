@@ -1,0 +1,13 @@
+{
+    "name": "Settings",
+    "themeTitle": "Theme Mode",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "themeSystem": "System",
+    "languageTitle": "Language",
+    "signoutTitle": "Sign out",
+    "chooseLanguageTitle": "Choose Language",
+    "chooseThemeTitle": "Choose Theme",
+    "languageArabic": "Arabic",
+    "languageEnglish": "English"
+}

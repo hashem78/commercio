@@ -45,5 +45,7 @@ app.*.map.json
 
 # commercio
 
-/pb_data/
-pocketbase.exe
+*.g.dart
+*.freezed.dart
+firebase_options.dart
+/android/app/google-services.json
