@@ -2,6 +2,7 @@ import 'package:commercio/models/user/user_model.dart';
 import 'package:commercio/router/route_names.dart';
 import 'package:commercio/screens/home/home_screen.dart';
 import 'package:commercio/screens/login/login_screen.dart';
+import 'package:commercio/screens/profile/profile_screen.dart';
 import 'package:commercio/screens/settings/settings_screen.dart';
 import 'package:commercio/state/auth.dart';
 import 'package:commercio/utils/go_router_refresh_stream.dart';
@@ -11,46 +12,46 @@ import 'package:go_router/go_router.dart';
 
 part 'router.g.dart';
 
-sealed class SRoute extends GoRouteData {
-  String get routeName;
-}
-
 @TypedGoRoute<HomeRoute>(
   name: kHomeRouteName,
   path: '/',
 )
-class HomeRoute extends SRoute {
+class HomeRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
-
-  @override
-  String get routeName => kSettingsRouteName;
 }
 
 @TypedGoRoute<LoginRoute>(
   name: kLoginRouteName,
   path: '/login',
 )
-class LoginRoute extends SRoute {
+class LoginRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const LoginScreen();
-
-  @override
-  String get routeName => kLoginRouteName;
 }
 
 @TypedGoRoute<SettingsRoute>(
   name: kSettingsRouteName,
   path: '/settings',
 )
-class SettingsRoute extends SRoute {
+class SettingsRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const SettingsScreen();
+}
 
+@TypedGoRoute<ProfileRoute>(
+  name: kProfileRouteName,
+  path: '/profile/:userId',
+)
+class ProfileRoute extends GoRouteData {
+  final String userId;
+
+  ProfileRoute({required this.userId});
   @override
-  String get routeName => kSettingsRouteName;
+  Widget build(BuildContext context, GoRouterState state) =>
+      ProfileScreen(userId: userId);
 }
 
 final routerProvider = Provider<GoRouter>(

@@ -16,6 +16,7 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +38,7 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
 
   if (kDebugMode) {
+    Animate.restartOnHotReload = true;
     print('============= using emulators ============');
     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
     FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
@@ -85,8 +87,9 @@ class MyApp extends ConsumerWidget {
             ),
             FormBuilderLocalizations.delegate,
           ],
-          theme: ThemeData.light().copyWith(useMaterial3: true),
-          darkTheme: ThemeData.dark().copyWith(useMaterial3: true),
+          theme: ThemeData.light(useMaterial3: true).copyWith(),
+          darkTheme: ThemeData.dark(useMaterial3: true)
+              .copyWith(brightness: Brightness.dark),
           themeMode: themeState.flutterThemeMode,
         );
       },

@@ -1,5 +1,5 @@
-import 'package:commercio/screens/shared/drawer/drawer.dart';
-import 'package:commercio/state/auth.dart';
+import 'package:commercio/screens/shared/scaffold.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,10 +8,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authProvider);
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: SDrawer(user: user),
+    return const SScaffold(
+      
     );
   }
 }

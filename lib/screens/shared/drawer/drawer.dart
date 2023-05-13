@@ -1,4 +1,3 @@
-import 'package:commercio/models/user/user_model.dart';
 import 'package:commercio/screens/shared/drawer/drawer_destinations.dart';
 
 import 'package:commercio/screens/shared/drawer/widgets/user_accounts_drawer_header.dart';
@@ -16,16 +15,7 @@ class DrawerIndex extends _$DrawerIndex {
 }
 
 class SDrawer extends ConsumerWidget {
-  const SDrawer({
-    super.key,
-    required this.user,
-  });
-
-  const SDrawer.headerless({
-    super.key,
-  }) : user = null;
-
-  final SUser? user;
+  const SDrawer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +31,7 @@ class SDrawer extends ConsumerWidget {
       },
       selectedIndex: selectedIndex,
       children: [
-        if (user != null) SUserAccountsDrawerHeader(user: user!),
+        const SUserAccountsDrawerHeader(),
         ...destinations.map((e) => e),
       ],
     );

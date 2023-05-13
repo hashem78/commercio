@@ -14,7 +14,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final translations = ref.watch(translationProvider).translations.settings;
     return SScaffold(
-      title: translations.name,
+      title: Text(translations.name),
       body: ListView(
         children: const [
           ThemeModeTile(),

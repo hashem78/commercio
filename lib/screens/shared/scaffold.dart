@@ -1,5 +1,4 @@
 import 'package:commercio/screens/shared/drawer/drawer.dart';
-import 'package:commercio/state/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +13,7 @@ class SScaffold extends ConsumerWidget {
     this.body,
     this.title,
     this.appBarSize,
+    this.actions,
   }) : _showDrawer = true;
 
   const SScaffold.drawerLess({
@@ -21,23 +21,35 @@ class SScaffold extends ConsumerWidget {
     this.body,
     this.title,
     this.appBarSize,
+    this.actions,
   }) : _showDrawer = false;
 
   final AppBarSize? appBarSize;
   final bool _showDrawer;
-  final String? title;
+  final Widget? title;
   final Widget? body;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appBarTitle = title ?? const Text('');
     final scaffoldBody = CustomScrollView(
       slivers: [
         switch (appBarSize) {
-          AppBarSize.medium => SliverAppBar.medium(title: Text(title ?? '')),
-          AppBarSize.large => SliverAppBar(title: Text(title ?? '')),
-          null => SliverAppBar(title: Text(title ?? '')),
+          AppBarSize.medium => SliverAppBar.medium(
+              title: appBarTitle,
+              actions: actions,
+            ),
+          AppBarSize.large => SliverAppBar.large(
+              title: appBarTitle,
+              actions: actions,
+            ),
+          null => SliverAppBar(
+              title: appBarTitle,
+              actions: actions,
+            ),
         },
-        SliverFillRemaining(
+        SliverToBoxAdapter(
           child: body,
         ),
       ],
@@ -45,7 +57,7 @@ class SScaffold extends ConsumerWidget {
 
     if (_showDrawer) {
       return Scaffold(
-        drawer: SDrawer(user: ref.watch(authProvider)),
+        drawer: const SDrawer(),
         body: scaffoldBody,
       );
     }
