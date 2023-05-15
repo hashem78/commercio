@@ -1,6 +1,7 @@
 import 'package:commercio/screens/shared/drawer/drawer_destinations.dart';
 
 import 'package:commercio/screens/shared/drawer/widgets/user_accounts_drawer_header.dart';
+import 'package:commercio/state/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,7 @@ class SDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(drawerIndexProvider);
     final destinations = ref.watch(drawerDestinationsProvider);
+    final user = ref.watch(authStreamProvider).value!;
 
     return NavigationDrawer(
       onDestinationSelected: (index) {
@@ -31,7 +33,7 @@ class SDrawer extends ConsumerWidget {
       },
       selectedIndex: selectedIndex,
       children: [
-        const SUserAccountsDrawerHeader(),
+        SUserAccountsDrawerHeader(userId: user.uid),
         ...destinations.map((e) => e),
       ],
     );

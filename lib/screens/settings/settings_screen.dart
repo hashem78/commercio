@@ -15,14 +15,12 @@ class SettingsScreen extends ConsumerWidget {
     final translations = ref.watch(translationProvider).translations.settings;
     return SScaffold(
       title: Text(translations.name),
-      body: ListView(
-        children: const [
-          ThemeModeTile(),
-          LocaleChangeTile(),
-          AboutTile(),
-          SignOutTile(),
-        ],
-      ),
+      children: const [
+        ThemeModeTile(),
+        LocaleChangeTile(),
+        AboutTile(),
+        SignOutTile(),
+      ],
     );
   }
 }

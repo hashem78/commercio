@@ -1,14 +1,18 @@
-import 'package:commercio/models/user/user_model.dart';
+import 'dart:async';
+
+import 'package:commercio/models/social_entry/social_entry.dart';
 import 'package:commercio/router/route_names.dart';
+import 'package:commercio/screens/edit_socials_screen/edit_social_modal_dialog.dart';
+import 'package:commercio/screens/edit_socials_screen/edit_socials_screen.dart';
 import 'package:commercio/screens/home/home_screen.dart';
 import 'package:commercio/screens/login/login_screen.dart';
 import 'package:commercio/screens/profile/profile_screen.dart';
 import 'package:commercio/screens/settings/settings_screen.dart';
 import 'package:commercio/state/auth.dart';
-import 'package:commercio/utils/go_router_refresh_stream.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:commercio/utils/utility_functions.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
 
@@ -54,31 +58,90 @@ class ProfileRoute extends GoRouteData {
       ProfileScreen(userId: userId);
 }
 
-final routerProvider = Provider<GoRouter>(
-  (ref) {
-    final auth = ref.watch(authProvider.notifier);
-    return GoRouter(
-      refreshListenable: GoRouterRefreshStream(auth.stream),
-      debugLogDiagnostics: true,
-      routes: $appRoutes,
-      redirect: (context, state) {
-        // if the user is not logged in, they need to login
-        final isLoggingIn = state.matchedLocation == '/login';
-        final authState = ref.read(authProvider);
-        final isNotLoggedIn = authState == const SUser();
-        if (isNotLoggedIn) {
-          return isLoggingIn ? null : '/login';
-        }
+@TypedGoRoute<EditSocialsRoute>(
+  name: kEditSocialsRouteName,
+  path: '/profile/:userId/editSocials',
+)
+class EditSocialsRoute extends GoRouteData {
+  final String userId;
 
-        // if the user is logged in but still on the login page, send them to
-        // the home page
-        if (isLoggingIn) {
-          return '/';
-        }
+  EditSocialsRoute({required this.userId});
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      EditSocialsScreen(userId: userId);
 
-        // no need to redirect at all
-        return null;
-      },
+  @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) =>
+      unauthorizedRedirect(context, userId);
+}
+
+@TypedGoRoute<EditSocialsDialogRoute>(
+  name: kEditSocialDialogRouteName,
+  path: '/profile/:userId/editSocials/dialog',
+)
+class EditSocialsDialogRoute extends GoRouteData {
+  final String userId;
+  final (SocialEntryType entryType, String link) $extra;
+
+  EditSocialsDialogRoute({
+    required this.userId,
+    required this.$extra,
+  });
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return MaterialPage(
+      child: EditSocialModalDialog(
+        userId: userId,
+        entryType: $extra.$1,
+        link: $extra.$2,
+      ),
+      fullscreenDialog: true,
     );
-  },
-);
+  }
+
+  @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) =>
+      unauthorizedRedirect(context, userId);
+}
+
+@TypedGoRoute<LoadingRoute>(
+  name: kLoadingRouteName,
+  path: '/loading',
+)
+class LoadingRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const Scaffold(body: Center(child: CircularProgressIndicator()));
+}
+
+@riverpod
+GoRouter router(RouterRef ref) {
+  return GoRouter(
+    debugLogDiagnostics: true,
+    routes: $appRoutes,
+    redirect: (context, state) {
+      // if the user is not logged in, they need to login
+      final isLoggingIn = state.matchedLocation == '/login';
+      final authState = ref.watch(authStreamProvider);
+
+      return authState.whenOrNull(
+        data: (user) {
+          //
+          final isNotLoggedIn = user == null;
+          if (isNotLoggedIn) return isLoggingIn ? null : '/login';
+
+          // if the user is logged in but still on the login page, send them to
+          // the home page
+          if (isLoggingIn) return '/';
+
+          // no need to redirect at all
+          return null;
+        },
+        loading: () {
+          return '/loading';
+        },
+      );
+    },
+  );
+}

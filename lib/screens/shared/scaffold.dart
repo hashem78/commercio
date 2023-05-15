@@ -10,7 +10,7 @@ enum AppBarSize {
 class SScaffold extends ConsumerWidget {
   const SScaffold({
     super.key,
-    this.body,
+    required this.children,
     this.title,
     this.appBarSize,
     this.actions,
@@ -18,7 +18,7 @@ class SScaffold extends ConsumerWidget {
 
   const SScaffold.drawerLess({
     super.key,
-    this.body,
+    required this.children,
     this.title,
     this.appBarSize,
     this.actions,
@@ -27,8 +27,8 @@ class SScaffold extends ConsumerWidget {
   final AppBarSize? appBarSize;
   final bool _showDrawer;
   final Widget? title;
-  final Widget? body;
   final List<Widget>? actions;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,8 +49,9 @@ class SScaffold extends ConsumerWidget {
               actions: actions,
             ),
         },
-        SliverToBoxAdapter(
-          child: body,
+        SliverList.builder(
+          itemCount: children.length,
+          itemBuilder: (context, index) => children[index],
         ),
       ],
     );

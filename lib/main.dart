@@ -87,9 +87,8 @@ class MyApp extends ConsumerWidget {
             ),
             FormBuilderLocalizations.delegate,
           ],
-          theme: ThemeData.light(useMaterial3: true).copyWith(),
-          darkTheme: ThemeData.dark(useMaterial3: true)
-              .copyWith(brightness: Brightness.dark),
+          theme: ThemeData.light(useMaterial3: true),
+          darkTheme: ThemeData.dark(useMaterial3: true),
           themeMode: themeState.flutterThemeMode,
         );
       },
