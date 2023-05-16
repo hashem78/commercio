@@ -4,10 +4,12 @@ import 'package:commercio/models/social_entry/social_entry.dart';
 import 'package:commercio/router/route_names.dart';
 import 'package:commercio/screens/edit_socials_screen/edit_social_modal_dialog.dart';
 import 'package:commercio/screens/edit_socials_screen/edit_socials_screen.dart';
+import 'package:commercio/screens/home/create_shop_modal_dialog.dart';
 import 'package:commercio/screens/home/home_screen.dart';
 import 'package:commercio/screens/login/login_screen.dart';
 import 'package:commercio/screens/profile/profile_screen.dart';
 import 'package:commercio/screens/settings/settings_screen.dart';
+import 'package:commercio/screens/shop_screen/shop_screen.dart';
 import 'package:commercio/state/auth.dart';
 import 'package:commercio/utils/utility_functions.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +107,20 @@ class EditSocialsDialogRoute extends GoRouteData {
       unauthorizedRedirect(context, userId);
 }
 
+@TypedGoRoute<CreateShopDialogRoute>(
+  name: kCreateShopDialogRouteName,
+  path: '/createShopDialog',
+)
+class CreateShopDialogRoute extends GoRouteData {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return const MaterialPage(
+      child: CreateShopModalDialog(),
+      fullscreenDialog: true,
+    );
+  }
+}
+
 @TypedGoRoute<LoadingRoute>(
   name: kLoadingRouteName,
   path: '/loading',
@@ -113,6 +129,20 @@ class LoadingRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const Scaffold(body: Center(child: CircularProgressIndicator()));
+}
+
+@TypedGoRoute<ShopRoute>(
+  name: kShopRouteName,
+  path: '/shop/:shopId',
+)
+class ShopRoute extends GoRouteData {
+  final String shopId;
+
+  ShopRoute(this.shopId);
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ShopScreen();
+  }
 }
 
 @riverpod

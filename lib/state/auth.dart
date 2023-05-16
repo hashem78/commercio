@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:commercio/models/profile_picture/profile_picture_model.dart';
+import 'package:commercio/models/profile_picture/picture.dart';
 import 'package:commercio/models/user/user_model.dart';
 import 'package:commercio/screens/shared/drawer/drawer.dart';
 
@@ -27,7 +27,7 @@ Stream<User?> authStream(AuthStreamRef ref) async* {
           id: event.uid,
           email: event.email!,
           name: event.displayName ?? event.email!.split('@').first,
-          profilePicture: SProfilePicture(
+          profilePicture: SPicture(
             link: event.photoURL ?? "https://i.imgur.com/qW7gjGk.jpg",
           ),
         );

@@ -1,7 +1,9 @@
-import 'package:commercio/models/profile_picture/profile_picture_model.dart';
+import 'package:commercio/models/profile_picture/picture.dart';
 import 'package:commercio/models/social_entry/social_entry.dart';
 import 'package:commercio/repositories/generic_repository.dart';
+import 'package:commercio/utils/utility_functions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
@@ -21,13 +23,15 @@ class SUser with _$SUser implements BaseEntity {
     @Default("")
         String phoneNumber,
     @Default(
-      SProfilePicture(
+      SPicture(
         link: 'https://i.imgur.com/kEqAm6K.png',
         width: 120,
         height: 120,
       ),
     )
-        SProfilePicture profilePicture,
+        SPicture profilePicture,
+    @TimestampConverter()
+        DateTime? createdOn,
     @Default({})
         Map<SocialEntryType, SocialEntry> socialEntriesMap,
   }) = _SUser;

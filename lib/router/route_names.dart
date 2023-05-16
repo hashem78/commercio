@@ -5,3 +5,5 @@ const kProfileRouteName = 'profile';
 const kEditSocialsRouteName = 'editSocials';
 const kEditSocialDialogRouteName = 'editSocialDialog';
 const kLoadingRouteName = 'loading';
+const kCreateShopDialogRouteName = 'createShop';
+const kShopRouteName = "shop";
