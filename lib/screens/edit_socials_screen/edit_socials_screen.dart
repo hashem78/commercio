@@ -4,6 +4,7 @@ import 'package:commercio/router/router.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/screens/shared/utility_widgets.dart';
 import 'package:commercio/state/auth.dart';
+import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,9 +19,11 @@ class EditSocialsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return  SScaffold.drawerLess(
+    final t = ref.watch(translationProvider).translations.editSocials;
+
+    return SScaffold.drawerLess(
       appBarSize: AppBarSize.medium,
-      title: const Text('Edit Socials'),
+      title: Text(t.title),
       children: [
         EditableEnableableSocialEntryTileList(userId: userId),
       ],

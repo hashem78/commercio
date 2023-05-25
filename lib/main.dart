@@ -40,10 +40,10 @@ Future<void> main() async {
   if (kDebugMode) {
     Animate.restartOnHotReload = true;
     print('============= using emulators ============');
-    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-    FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
-    await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+    await FirebaseAuth.instance.useAuthEmulator('192.168.1.26', 9099);
+    FirebaseFirestore.instance.useFirestoreEmulator('192.168.1.26', 8080);
+    FirebaseFunctions.instance.useFunctionsEmulator('192.168.1.26', 5001);
+    await FirebaseStorage.instance.useStorageEmulator('192.168.1.26', 9199);
   }
 
   FirebaseUIAuth.configureProviders(
@@ -87,8 +87,14 @@ class MyApp extends ConsumerWidget {
             ),
             FormBuilderLocalizations.delegate,
           ],
-          theme: ThemeData.light(useMaterial3: true),
-          darkTheme: ThemeData.dark(useMaterial3: true),
+          theme: ThemeData.light(
+            useMaterial3: true,
+          ).copyWith(
+            brightness: Brightness.light,
+          ),
+          darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+            brightness: Brightness.dark,
+          ),
           themeMode: themeState.flutterThemeMode,
         );
       },

@@ -1,4 +1,8 @@
 {
-    "applicationName" : "Commercio",
-    "applicationLegalese" : "Commercio is an open source libre e-commerce platform, licensed under MIT"
+    "applicationName": "Commercio",
+    "applicationLegalese": "Commercio is an open source libre e-commerce platform, licensed under MIT",
+    "editButtonToolTipText": "Edit",
+    "nothingToLookAtText": "Nothing to Look at :(",
+    "startTypingToSearch": "Start Typing to Search",
+    "tapOnMapToGetAddress": "Tap on Map to Get Address"
 }

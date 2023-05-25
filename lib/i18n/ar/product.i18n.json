@@ -1,0 +1,15 @@
+{
+    "addProductTitle": "اضافة منتح",
+    "editProductTitle": "تعديل منتج",
+    "catergoriesSectionTitle": "الفئات",
+    "nameSectionTitle": "الاسم",
+    "descriptionSectionTtile": "التفاصيل",
+    "priceSectionTitle": "السعر",
+    "productPhotosSectionTitle": "الصور",
+    "availabilitySectionTitle": "التوفر",
+    "inStockAvailabilityText": "متوفر",
+    "outOfStockAvailabilityText": "غير متوفر",
+    "nameHintText": "اسم منتج لطيف",
+    "desctiptionHintText": "هذا المنتج سوف يغير العالم",
+    "createButtonText": "انشاء"
+}

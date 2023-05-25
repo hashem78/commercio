@@ -3,6 +3,7 @@ import 'package:commercio/models/user/user_model.dart';
 import 'package:commercio/repositories/generic_repository.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/state/auth.dart';
+import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,19 +34,20 @@ class _EditSocialModalDialogState extends ConsumerState<EditSocialModalDialog> {
   Widget build(BuildContext context) {
     final user = ref.watch(userStreamProvider(widget.userId)).value!;
     final entryName = toBeginningOfSentenceCase(widget.entryType.name);
+    final t = ref.watch(translationProvider).translations.editSocials;
 
     final enabled = user.socialEntriesMap.containsKey(widget.entryType);
 
     final subTitle = switch (enabled) {
       true => Text(widget.link, style: const TextStyle(color: Colors.grey)),
-      false => Text('$entryName is not being used'),
+      false => Text('$entryName ${t.isNotBeingUsed}'),
     };
 
     return SScaffold.drawerLess(
-      title: Text('Edit Social - $entryName'),
+      title: Text('${t.title} - $entryName'),
       children: [
         ListTile(
-          title: const Text('Old Link'),
+          title: Text(t.oldLink),
           enabled: enabled,
           onTap: () async {
             await launchUrl(Uri.parse(widget.link));

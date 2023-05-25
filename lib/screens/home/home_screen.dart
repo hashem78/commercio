@@ -6,11 +6,16 @@ import 'package:commercio/router/router.dart';
 import 'package:commercio/screens/shared/drawer/drawer.dart';
 import 'package:commercio/screens/shared/utility_widgets.dart';
 import 'package:commercio/state/auth.dart';
+import 'package:commercio/state/cart_details/cart_details.dart';
+import 'package:commercio/state/locale.dart';
+import 'package:commercio/state/product_category/product_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -18,15 +23,16 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authedUser = ref.watch(authStreamProvider).value!;
+    final t = ref.watch(translationProvider).translations.home;
 
     return Scaffold(
       drawer: const SDrawer(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => CreateShopDialogRoute().push(context),
-        label: const Row(
+        label: Row(
           children: [
-            Icon(Icons.add),
-            Text('Create Shop'),
+            const Icon(Icons.add),
+            Text(t.createShopFABTitle),
           ],
         ),
       ).animate(),
@@ -36,26 +42,20 @@ class HomeScreen extends HookConsumerWidget {
           headerSliverBuilder: (context, isBoxScrolled) {
             return [
               SliverAppBar(
-                title: const Text('Shops'),
-                actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Badge.count(
-                      count: 1,
-                      child: const FaIcon(FontAwesomeIcons.cartShopping),
-                    ),
-                  ),
+                title: Text(t.title),
+                actions: const [
+                  CartIconButton(),
                 ],
                 forceElevated: true,
-                bottom: const TabBar(
+                bottom: TabBar(
                   tabs: [
                     Tab(
-                      text: 'My Shops',
-                      icon: Icon(Icons.person),
+                      text: t.myShopsTabTitle,
+                      icon: const Icon(Icons.person),
                     ),
                     Tab(
-                      text: 'Shops',
-                      icon: FaIcon(FontAwesomeIcons.globe),
+                      text: t.shopsTabTitle,
+                      icon: const FaIcon(FontAwesomeIcons.globe),
                     ),
                   ],
                 ),
@@ -73,6 +73,35 @@ class HomeScreen extends HookConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CartIconButton extends ConsumerWidget {
+  const CartIconButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartDetailsAsyncValue = ref.watch(cartDetailsStreamProvider);
+    return cartDetailsAsyncValue.when(
+      data: (details) {
+        return IconButton(
+          onPressed: () {
+            CartRoute($extra: true).push(context);
+          },
+          icon: Badge.count(
+            count: details.itemCount,
+            child: const FaIcon(FontAwesomeIcons.cartShopping),
+          ),
+        );
+      },
+      loading: () => const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: FaIcon(FontAwesomeIcons.cartShopping),
+      ),
+      error: errorWidget,
     );
   }
 }
@@ -95,6 +124,11 @@ class ShopList extends HookConsumerWidget {
         snap.data(),
         isInAuthedList: isAuthedList,
       ),
+      emptyBuilder: (context) {
+        return Center(
+          child: Lottie.asset('assets/lottiefiles/empty.json'),
+        );
+      },
       query: FirebaseFirestore.instance
           .collection(
             'shops',
@@ -127,23 +161,53 @@ class SShopListWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final owner = ref.watch(userStreamProvider(shop.ownerId));
+
     return owner.when(
       data: (owner) {
-        return ListTile(
-          leading: switch (!isInAuthedList) {
-            true => CircleAvatar(
-                foregroundImage: CachedNetworkImageProvider(
-                  owner.profilePicture.link,
+        return Consumer(
+          builder: (context, ref, child) {
+            final categoriesAsyncValue = ref.watch(
+              productCategoryStreamProvider(shop.id),
+            );
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  leading: switch (!isInAuthedList) {
+                    true => CircleAvatar(
+                        foregroundImage: CachedNetworkImageProvider(
+                          owner.profilePicture.link,
+                        ),
+                      ),
+                    false => null,
+                  },
+                  title: Text(shop.name),
+                  subtitle: switch (!isInAuthedList) {
+                    true => Text(owner.name),
+                    false => null,
+                  },
+                  onTap: () =>
+                      ShopRoute(shop.id, $extra: isInAuthedList).push(context),
                 ),
-              ),
-            false => null,
+                categoriesAsyncValue.when(
+                  data: (categories) {
+                    if (categories.isEmpty) return const SizedBox();
+                    final cats = categories.map((c) => c.category);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        cats.join(', '),
+                        style: TextStyle(fontSize: 20.sp),
+                      ),
+                    );
+                  },
+                  error: errorWidget,
+                  loading: loadingWidget,
+                ),
+              ],
+            );
           },
-          title: Text(shop.name),
-          subtitle: switch (!isInAuthedList) {
-            true => Text(owner.name),
-            false => null,
-          },
-          onTap: () => ShopRoute(shop.id).push(context),
         );
       },
       error: errorWidget,

@@ -1,0 +1,15 @@
+{
+    "addProductTitle": "Add Product",
+    "editProductTitle": "Edit Product",
+    "catergoriesSectionTitle": "Categories",
+    "nameSectionTitle": "Name",
+    "descriptionSectionTtile": "Description",
+    "priceSectionTitle": "Price",
+    "productPhotosSectionTitle": "Product Photos",
+    "availabilitySectionTitle": "Availability",
+    "inStockAvailabilityText": "In Stock",
+    "outOfStockAvailabilityText": "Out of Stock",
+    "nameHintText": "A fancy product name",
+    "desctiptionHintText": "This product is going to change the world!",
+    "createButtonText": "Create"
+}

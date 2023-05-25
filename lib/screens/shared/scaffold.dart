@@ -14,6 +14,7 @@ class SScaffold extends ConsumerWidget {
     this.title,
     this.appBarSize,
     this.actions,
+    this.floatingActionButton,
   }) : _showDrawer = true;
 
   const SScaffold.drawerLess({
@@ -22,6 +23,7 @@ class SScaffold extends ConsumerWidget {
     this.title,
     this.appBarSize,
     this.actions,
+    this.floatingActionButton,
   }) : _showDrawer = false;
 
   final AppBarSize? appBarSize;
@@ -29,6 +31,7 @@ class SScaffold extends ConsumerWidget {
   final Widget? title;
   final List<Widget>? actions;
   final List<Widget> children;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,11 +61,13 @@ class SScaffold extends ConsumerWidget {
 
     if (_showDrawer) {
       return Scaffold(
+        floatingActionButton: floatingActionButton,
         drawer: const SDrawer(),
         body: scaffoldBody,
       );
     }
     return Scaffold(
+      floatingActionButton: floatingActionButton,
       body: scaffoldBody,
     );
   }

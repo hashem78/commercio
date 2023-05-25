@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:commercio/models/social_entry/social_entry.dart';
 import 'package:commercio/router/router.dart';
 import 'package:commercio/state/editing/editing.dart';
+import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -25,7 +26,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsyncValue = ref.watch(userProvider(userId: userId));
-
+    final t = ref.watch(translationProvider).translations.profile;
     final user = userAsyncValue.maybeWhen(
       data: (user) => user,
       orElse: () => null,
@@ -91,7 +92,7 @@ class ProfileScreen extends ConsumerWidget {
     );
 
     return SScaffold.drawerLess(
-      title: const Text('Profile'),
+      title: Text(t.title),
       appBarSize: AppBarSize.large,
       actions: [
         EditingIconButton(
@@ -148,11 +149,13 @@ class EditSocialsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEditing = ref.watch(editingProvider);
+    final t = ref.watch(translationProvider).translations.profile;
+
     return ListTile(
       leading: const Icon(Icons.edit),
       onTap: () => EditSocialsRoute(userId: userId).push(context),
       enabled: isEditing,
-      title: const Text('Edit Socials'),
+      title: Text(t.editSocialsButtonText),
     );
   }
 }

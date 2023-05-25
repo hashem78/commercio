@@ -29,7 +29,10 @@ class SDrawer extends ConsumerWidget {
         if (selectedIndex == index) return;
         final drawerIndexNotifier = ref.read(drawerIndexProvider.notifier);
         drawerIndexNotifier.change(index);
-        context.goNamed(destinations[index].routeName);
+        context.pushReplacementNamed(
+          destinations[index].routeName,
+          extra: true,
+        );
       },
       selectedIndex: selectedIndex,
       children: [

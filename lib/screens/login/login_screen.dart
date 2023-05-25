@@ -11,10 +11,24 @@ class LoginScreen extends StatelessWidget {
     return SignInScreen(
       resizeToAvoidBottomInset: true,
       headerBuilder: (context, constraints, shrinkOffset) {
-        return const Row(
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LoginScreenToggleLanguageButton(),
-            LoginScreenSelectThemeButton(),
+            const Row(
+              children: [
+                LoginScreenToggleLanguageButton(),
+                LoginScreenSelectThemeButton(),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: Image.asset(
+                  'assets/icon/icon.png',
+                  height: 150,
+                  width: 150,
+                ),
+              ),
+            ),
           ],
         );
       },

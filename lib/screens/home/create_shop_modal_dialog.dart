@@ -4,6 +4,7 @@ import 'package:commercio/models/shop/shop.dart';
 import 'package:commercio/repositories/generic_repository.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/state/auth.dart';
+import 'package:commercio/state/locale.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,13 +26,14 @@ class _CreateShopModalDialogState extends ConsumerState<CreateShopModalDialog> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authStreamProvider).value!;
+    final t = ref.watch(translationProvider).translations.createShop;
 
     return SScaffold.drawerLess(
-      title: const Text('Create Shop'),
+      title: Text(t.title),
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text('Shop Name'),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(t.shopNameFieldTitle),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -45,7 +47,9 @@ class _CreateShopModalDialogState extends ConsumerState<CreateShopModalDialog> {
               keyboardType: TextInputType.name,
               inputFormatters: [
                 FilteringTextInputFormatter.singleLineFormatter,
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                FilteringTextInputFormatter.allow(
+                  RegExp(r"[\u0621-\u064Aa-zA-Z\s\']"),
+                ),
               ],
               validator: FormBuilderValidators.compose(
                 [

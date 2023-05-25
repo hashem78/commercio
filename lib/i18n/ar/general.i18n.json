@@ -1,4 +1,8 @@
 {
     "applicationName" : "كوميرشيو",
-    "applicationLegalese" : "كوميرشيو عبارة عن نظام تجارة الكترونية مفتوح المصدر، تحت غطاء MIT"
+    "applicationLegalese" : "كوميرشيو عبارة عن نظام تجارة الكترونية مفتوح المصدر، تحت غطاء MIT",
+    "editButtonToolTipText": "تعديل",
+    "nothingToLookAtText": "لا يوجد شيء هنا :(",
+    "startTypingToSearch": "قم بالكتابة ليبدأ البحث",
+    "tapOnMapToGetAddress": "اضغط على الخريطة لتحصل على العنوان"
 }
