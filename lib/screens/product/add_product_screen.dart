@@ -69,9 +69,11 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                   fields['availability']!.value as ProductAvailability;
 
               final db = FirebaseFirestore.instance;
-              final docRef = db.doc('/shops/${widget.shopId}/products');
 
               final productId = const Uuid().v4();
+              final docRef = db.doc(
+                '/shops/${widget.shopId}/products/$productId',
+              );
               final storage = FirebaseStorage.instance;
 
               final pictures = <SPicture>[];
