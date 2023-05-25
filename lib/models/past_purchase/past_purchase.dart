@@ -14,7 +14,7 @@ class PastPurchase with _$PastPurchase implements BaseEntity {
   @Implements<BaseEntity>()
   const factory PastPurchase({
     required String id,
-    required SLocation location,
+    SLocation? location,
     @Default([]) List<SProduct> products,
     @Default(0) double totalPrice,
     @TimestampConverter() DateTime? createdOn,
