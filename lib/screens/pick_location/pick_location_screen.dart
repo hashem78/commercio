@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:map_location_picker/map_location_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class PickLocationScreen extends ConsumerWidget {
   final SLocation? initialLocation;
@@ -20,7 +21,7 @@ class PickLocationScreen extends ConsumerWidget {
         apiKey: "AIzaSyCtGSyelt2aTISAD0rBFOzuveCcpltVTw4",
         currentLatLng: switch (initialLocation) {
           null => null,
-          _ => LatLng(initialLocation!.lng, initialLocation!.lat),
+          _ => LatLng(initialLocation!.lat, initialLocation!.lng),
         },
         showBackButton: false,
         showMoreOptions: false,
@@ -32,13 +33,14 @@ class PickLocationScreen extends ConsumerWidget {
         bottomCardMargin: EdgeInsets.zero,
         bottomCardShape: const RoundedRectangleBorder(),
         searchHintText: t.translations.general.startTypingToSearch,
-        
         bottomCardTooltip: t.translations.general.tapOnMapToGetAddress,
+        canPopOnNextButtonTaped: true,
         onNext: (GeocodingResult? result) {
           if (result == null) return;
 
           context.pop(
             SLocation(
+              id: const Uuid().v4(),
               lat: result.geometry.location.lat,
               lng: result.geometry.location.lng,
               address: result.formattedAddress!,

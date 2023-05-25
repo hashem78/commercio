@@ -11,5 +11,7 @@
     "outOfStockAvailabilityText": "Out of Stock",
     "nameHintText": "A fancy product name",
     "desctiptionHintText": "This product is going to change the world!",
-    "createButtonText": "Create"
+    "createButtonText": "Create",
+    "deleteButtonText": "Delete",
+    "continueButtonText": "Continue"
 }

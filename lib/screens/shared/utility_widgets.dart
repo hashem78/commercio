@@ -78,6 +78,7 @@ class FirestoreSliverList<T extends BaseEntity> extends ConsumerWidget {
     required this.collectionPath,
     required this.fromJson,
     required this.builder,
+    this.emptyBuilder,
   });
 
   final String collectionPath;
@@ -87,6 +88,8 @@ class FirestoreSliverList<T extends BaseEntity> extends ConsumerWidget {
     int index,
     List<T> entites,
   ) builder;
+
+  final Widget Function(BuildContext context)? emptyBuilder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -112,6 +115,11 @@ class FirestoreSliverList<T extends BaseEntity> extends ConsumerWidget {
         }
         final docs = snapshot.docs;
         if (docs.isEmpty) {
+          if (emptyBuilder != null) {
+            return SliverFillRemaining(
+              child: Center(child: emptyBuilder!(context)),
+            );
+          }
           return SliverFillRemaining(
             child: Center(
               child: Lottie.asset('assets/lottiefiles/empty.json'),

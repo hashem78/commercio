@@ -1,3 +1,4 @@
+import 'package:commercio/models/location/location.dart';
 import 'package:commercio/models/product_entry/product_entry.dart';
 import 'package:commercio/router/router.dart';
 import 'package:commercio/screens/shared/drawer/drawer.dart';
@@ -99,6 +100,30 @@ class ContinuePurchaseCard extends HookConsumerWidget {
               const Divider(),
               TextButton(
                 onPressed: () async {
+                  final location =
+                      await PickDeliveryLocationRoute().push<SLocation?>(
+                    context,
+                  );
+                  if (location == null) {
+                    if (!isMounted()) return;
+
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'You need to pick a location!',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+
+                  if (!isMounted()) return;
+
+                  // ignore: use_build_context_synchronously
                   await LoadingRoute(
                     $extra: const Duration(seconds: 1),
                   ).push(context);
@@ -106,7 +131,10 @@ class ContinuePurchaseCard extends HookConsumerWidget {
                   if (!isMounted()) return;
 
                   // ignore: use_build_context_synchronously
-                  await PurchaseCompleteRoute(uid).push(context);
+                  await PurchaseCompleteRoute((
+                    uid: uid,
+                    location: location,
+                  )).push(context);
                 },
                 child: Text(t.continueButtonText),
               ),

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:commercio/models/location/location.dart';
 import 'package:commercio/models/product/product.dart';
 import 'package:commercio/models/shop/shop.dart';
@@ -30,7 +31,7 @@ class ShopScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shopAsyncValue = ref.watch(shopStreamProvider(shopId));
     final isEditing = ref.watch(editingProvider);
-    final t = ref.watch(translationProvider).translations.shop;
+    final t = ref.watch(translationProvider).translations;
     final isMounted = useIsMounted();
 
     return shopAsyncValue.when(
@@ -42,7 +43,7 @@ class ShopScreen extends HookConsumerWidget {
                 label: Row(
                   children: [
                     const Icon(Icons.add),
-                    Text(t.addProductFABTitle),
+                    Text(t.shop.addProductFABTitle),
                   ],
                 ),
               ),
@@ -66,13 +67,15 @@ class ShopScreen extends HookConsumerWidget {
                   if (isEditing)
                     TextButton(
                       onPressed: () async {
-                        final db = FirebaseFirestore.instance;
-                        await db.doc('/shops/$shopId').delete();
+                        final func = FirebaseFunctions.instance;
+                        await func.httpsCallable('deleteShop').call({
+                          'shopId': shop.id,
+                        });
                         // ignore: use_build_context_synchronously
                         if (isMounted()) context.pop();
                       },
                       child: Text(
-                        t.deleteIconButtonText,
+                        t.shop.deleteIconButtonText,
                         style: const TextStyle(color: Colors.red),
                       ),
                     )
@@ -112,6 +115,7 @@ class ShopOwnerCard extends HookConsumerWidget {
     final owner = ref.watch(userStreamProvider(shop.ownerId));
     final isEditing = ref.watch(editingProvider);
     final locationText = useState(shop.location?.address);
+    final t = ref.watch(translationProvider).translations.general;
 
     return owner.when(
       data: (owner) {
@@ -125,34 +129,41 @@ class ShopOwnerCard extends HookConsumerWidget {
                     owner.profilePicture.link,
                   ),
                 ),
+                onTap: () {
+                  ProfileRoute(userId: owner.id).push(context);
+                },
                 title: Text(owner.name),
               ),
               const Divider(),
               ListTile(
-                title: const Text('Location'),
+                title: Text(t.location),
                 subtitle: switch (locationText.value) {
                   null => null,
                   _ => Text(locationText.value!),
                 },
-                onTap: isEditing
-                    ? () async {
-                        final location =
-                            await PickLocationRoute($extra: shop.location)
-                                .push<SLocation>(context);
+                onTap: switch (isEditing) {
+                  true => () async {
+                      final location =
+                          await PickLocationRoute($extra: shop.location)
+                              .push<SLocation>(context);
 
-                        if (location == null) return;
+                      if (location == null) return;
 
-                        locationText.value = location.address;
+                      locationText.value = location.address;
 
-                        final db = FirebaseFirestore.instance;
-                        await db
-                            .doc('/shops/${shop.id}')
-                            .update({'location': location.toJson()});
-                      }
-                    : () {
-                        if (shop.location == null) return;
-                        LocationRoute($extra: shop.location!).push(context);
-                      },
+                      final db = FirebaseFirestore.instance;
+                      await db
+                          .doc('/shops/${shop.id}')
+                          .update({'location': location.toJson()});
+                    },
+                  false => switch (shop.location) {
+                      null => null,
+                      _ => () {
+                          if (shop.location == null) return;
+                          LocationRoute($extra: shop.location!).push(context);
+                        },
+                    }
+                },
               ),
             ],
           ),

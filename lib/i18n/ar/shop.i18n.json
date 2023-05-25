@@ -3,5 +3,6 @@
     "removeFromCartButtonText": "ازالة من السلة",
     "editProductButtonText": "تعديل",
     "addProductFABTitle":"اضافة منتج",
-    "deleteIconButtonText": "الغاء"
+    "deleteIconButtonText": "الغاء",
+    "deleteProductButtonText": "الغاء"
 }

@@ -33,6 +33,7 @@ class LikedProductsScreen extends ConsumerWidget {
                   final productAsyncValue = ref.watch(
                     productStreamProvider(entity.shopId, entity.id),
                   );
+
                   return productAsyncValue.when(
                     data: (product) => ProductCard(
                       product: product,

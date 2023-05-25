@@ -13,9 +13,13 @@ class PastPurchaseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String subTitleText = DateFormat.yMMMEd().format(pastPurchase.createdOn!);
+    if (pastPurchase.location != null) {
+      subTitleText = '$subTitleText to ${pastPurchase.location!.address}';
+    }
     return ListTile(
       title: Text(pastPurchase.totalPrice.toStringAsFixed(2)),
-      subtitle: Text(DateFormat.yMMMEd().format(pastPurchase.createdOn!)),
+      subtitle: Text(subTitleText),
       onTap: () {
         PastPurchaseProductDetailsRoute(pastPurchase.products).push(context);
       },

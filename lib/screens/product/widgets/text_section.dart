@@ -6,13 +6,13 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 class TextSection extends StatelessWidget {
   final String formItemName;
   final String titleText;
-  final String hintText;
+  final String? hintText;
 
   const TextSection({
     super.key,
     required this.formItemName,
     required this.titleText,
-    required this.hintText,
+    this.hintText,
   });
 
   @override

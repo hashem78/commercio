@@ -39,9 +39,14 @@ List<SDrawerDestionation> drawerDestinations(Ref ref) {
       routeName: kPastPurchasesRouteName,
     ),
     SDrawerDestionation(
-      icon: const FaIcon(FontAwesomeIcons.heart),
+      icon: const FaIcon(FontAwesomeIcons.solidHeart),
       label: Text(t.likedProductTileTitle),
       routeName: kLikedProductsRouteName,
+    ),
+    SDrawerDestionation(
+      icon: const FaIcon(FontAwesomeIcons.locationPin),
+      label: Text(t.locationsTileTitle),
+      routeName: kDeliveryLocationsRouteName,
     ),
     SDrawerDestionation(
       icon: const Icon(Icons.settings),

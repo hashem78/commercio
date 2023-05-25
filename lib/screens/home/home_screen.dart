@@ -89,7 +89,7 @@ class CartIconButton extends ConsumerWidget {
       data: (details) {
         return IconButton(
           onPressed: () {
-            CartRoute($extra: true).push(context);
+            CartRoute($extra: false).push(context);
           },
           icon: Badge.count(
             count: details.itemCount,

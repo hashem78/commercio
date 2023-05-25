@@ -52,7 +52,13 @@ class ProductCard extends ConsumerWidget {
                     productPrice: product.price,
                   ),
               },
-              if (isEditing) EditProductButton(product: product)
+              ...switch (isEditing) {
+                true => [
+                    EditProductButton(product: product),
+                    DeleteProductButton(product: product)
+                  ],
+                false => [],
+              }
             ],
           ),
         );
@@ -177,6 +183,35 @@ class EditProductButton extends ConsumerWidget {
       },
       icon: const Icon(Icons.edit),
       label: Text(t.editProductButtonText),
+    );
+  }
+}
+
+class DeleteProductButton extends ConsumerWidget {
+  final SProduct product;
+  const DeleteProductButton({
+    super.key,
+    required this.product,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(translationProvider).translations.shop;
+
+    return TextButton.icon(
+      onPressed: () async {
+        final db = FirebaseFirestore.instance;
+        await db
+            .doc('/shops/${product.shopId}/products/${product.id}')
+            .delete();
+      },
+      icon: const Icon(Icons.delete, color: Colors.red),
+      label: Text(
+        t.deleteProductButtonText,
+        style: const TextStyle(
+          color: Colors.red,
+        ),
+      ),
     );
   }
 }

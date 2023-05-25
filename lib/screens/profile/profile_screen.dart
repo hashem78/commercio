@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:commercio/models/social_entry/social_entry.dart';
 import 'package:commercio/router/router.dart';
+import 'package:commercio/state/auth.dart';
 import 'package:commercio/state/editing/editing.dart';
 import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,8 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsyncValue = ref.watch(userProvider(userId: userId));
+    final authedUser = ref.watch(authStreamProvider).valueOrNull!;
+    final allowEditing = userId == authedUser.uid;
     final t = ref.watch(translationProvider).translations.profile;
     final user = userAsyncValue.maybeWhen(
       data: (user) => user,
@@ -95,13 +98,14 @@ class ProfileScreen extends ConsumerWidget {
       title: Text(t.title),
       appBarSize: AppBarSize.large,
       actions: [
-        EditingIconButton(
-          allowEditing: user != null,
-          onEditingComplete: () {
-            if (user == null) return false;
-            return true;
-          },
-        ),
+        if (allowEditing)
+          EditingIconButton(
+            allowEditing: user != null,
+            onEditingComplete: () {
+              if (user == null) return false;
+              return true;
+            },
+          ),
       ],
       children: [
         Card(

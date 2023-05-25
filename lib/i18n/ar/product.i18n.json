@@ -11,5 +11,7 @@
     "outOfStockAvailabilityText": "غير متوفر",
     "nameHintText": "اسم منتج لطيف",
     "desctiptionHintText": "هذا المنتج سوف يغير العالم",
-    "createButtonText": "انشاء"
+    "createButtonText": "انشاء",
+    "deleteButtonText": "الغاء",
+    "continueButtonText": "الاستمرار"
 }

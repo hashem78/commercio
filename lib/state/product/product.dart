@@ -20,7 +20,7 @@ Stream<SProduct> productStream(
       )
       .snapshots();
   await for (final snapshot in snapshots) {
-    if (!snapshot.exists) continue;
+    if (!snapshot.exists) return;
 
     yield snapshot.data()!;
   }

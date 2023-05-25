@@ -18,3 +18,5 @@ const kPastPurchaseProductDetailsRouteName = "pastPurchaseDetails";
 const kEditProductRouteName = "editProduct";
 const kPickLocationRouteName = "pickLocation";
 const kLocationRouteName = "location";
+const kDeliveryLocationsRouteName = "deliveryLocations";
+const kPickDeliveryLocationRouteName = 'pickDeliveryLocation';

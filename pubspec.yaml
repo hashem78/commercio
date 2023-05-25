@@ -59,9 +59,11 @@ dependencies:
   like_button: ^2.0.5
   input_quantity: ^1.1.6
   lottie: ^2.3.2
-  geocoding: ^2.1.0
+  geolocator: ^9.0.2
   map_location_picker: ^1.2.0
   google_maps_flutter: ^2.2.8
+  geocoding: ^2.1.0
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:

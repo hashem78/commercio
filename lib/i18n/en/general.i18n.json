@@ -4,5 +4,6 @@
     "editButtonToolTipText": "Edit",
     "nothingToLookAtText": "Nothing to Look at :(",
     "startTypingToSearch": "Start Typing to Search",
-    "tapOnMapToGetAddress": "Tap on Map to Get Address"
+    "tapOnMapToGetAddress": "Tap on Map to Get Address",
+    "location": "Location"
 }

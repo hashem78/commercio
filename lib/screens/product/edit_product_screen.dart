@@ -6,6 +6,7 @@ import 'package:commercio/screens/product/widgets/categories_section.dart';
 import 'package:commercio/screens/product/widgets/price_section.dart';
 import 'package:commercio/screens/product/widgets/text_section.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
+import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
@@ -45,10 +46,11 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = ref.watch(translationProvider).translations.product;
     return FormBuilder(
       key: formKey,
       child: SScaffold.drawerLess(
-        title: const Text('Add Product'),
+        title: Text(t.editProductTitle),
         actions: [
           TextButton(
             onPressed: () async {
@@ -95,7 +97,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
               );
               if (mounted) context.pop();
             },
-            child: const Text('Continue'),
+            child: Text(t.continueButtonText),
           ),
         ],
         children: <Widget>[
@@ -103,18 +105,35 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
             shopId: widget.product.shopId,
             formItemName: 'categories',
           ),
-          const TextSection(
+          TextSection(
             formItemName: 'name',
-            titleText: 'Name',
-            hintText: 'A fancy product name',
+            titleText: t.nameSectionTitle,
           ),
-          const TextSection(
+          TextSection(
             formItemName: 'description',
-            titleText: 'Description',
-            hintText: 'This product is going to change the world!',
+            titleText: t.descriptionSectionTtile,
           ),
           const PriceSection(formItemName: 'price'),
           const AvailabilitySection(formItemName: 'availability'),
+          TextButton.icon(
+            onPressed: () async {
+              final db = FirebaseFirestore.instance;
+              await db
+                  .doc(
+                    '/shops/${widget.product.shopId}/products/${widget.product.id}',
+                  )
+                  .delete();
+              if (mounted) context.pop();
+            },
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            label: Text(
+              t.deleteButtonText,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
         ].intersperse(const Divider()).toList(),
       ),
     );

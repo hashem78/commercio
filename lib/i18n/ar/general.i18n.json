@@ -4,5 +4,6 @@
     "editButtonToolTipText": "تعديل",
     "nothingToLookAtText": "لا يوجد شيء هنا :(",
     "startTypingToSearch": "قم بالكتابة ليبدأ البحث",
-    "tapOnMapToGetAddress": "اضغط على الخريطة لتحصل على العنوان"
+    "tapOnMapToGetAddress": "اضغط على الخريطة لتحصل على العنوان",
+    "location": "العنوان"
 }

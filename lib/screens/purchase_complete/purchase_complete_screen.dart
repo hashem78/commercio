@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:commercio/models/location/location.dart';
 import 'package:commercio/router/route_names.dart';
 import 'package:commercio/state/loading/loading.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PurchaseCompleteScreen extends HookConsumerWidget {
-  final String uid;
+  final ({String uid, SLocation location}) data;
   const PurchaseCompleteScreen({
     super.key,
-    required this.uid,
+    required this.data,
   });
 
   @override
@@ -22,9 +23,11 @@ class PurchaseCompleteScreen extends HookConsumerWidget {
       (_, next) {
         next.whenData(
           (_) async {
-            FirebaseFunctions.instance
-                .httpsCallable('emptyCart')
-                .call({"uid": uid});
+            await FirebaseFunctions.instance.httpsCallable('emptyCart').call({
+              "uid": data.uid,
+              "location": data.location.toJson(),
+            });
+            // ignore: use_build_context_synchronously
             if (isMounted()) context.replaceNamed(kHomeRouteName);
           },
         );

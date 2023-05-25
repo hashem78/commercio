@@ -2,6 +2,7 @@
     "addToCartButtonText": "Add to Cart",
     "removeFromCartButtonText": "Remove from Cart",
     "editProductButtonText": "Edit",
-    "addProductFABTitle":"Add Product",
-    "deleteIconButtonText": "Delete"
+    "addProductFABTitle": "Add Product",
+    "deleteIconButtonText": "Delete",
+    "deleteProductButtonText": "Delete"
 }

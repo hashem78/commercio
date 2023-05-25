@@ -5,8 +5,10 @@ import 'package:commercio/models/product/product.dart';
 import 'package:commercio/models/social_entry/social_entry.dart';
 import 'package:commercio/router/route_names.dart';
 import 'package:commercio/screens/cart/cart_screen.dart';
+import 'package:commercio/screens/delivery_locations/delivery_locations_screen.dart';
 import 'package:commercio/screens/edit_categories/edit_categories_screen.dart';
 import 'package:commercio/screens/location/location_screen.dart';
+import 'package:commercio/screens/pick_delivery_location/pick_delivery_location_screen.dart';
 import 'package:commercio/screens/pick_location/pick_location_screen.dart';
 import 'package:commercio/screens/product/add_product_screen.dart';
 import 'package:commercio/screens/product/edit_product_screen.dart';
@@ -242,12 +244,12 @@ class LikedProductsRoute extends GoRouteData {
   path: '/purchaseCompelete',
 )
 class PurchaseCompleteRoute extends GoRouteData {
-  final String $extra;
+  final ({String uid, SLocation location}) $extra;
 
   PurchaseCompleteRoute(this.$extra);
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      PurchaseCompleteScreen(uid: $extra);
+      PurchaseCompleteScreen(data: $extra);
 }
 
 @TypedGoRoute<PastPurchasesRoute>(
@@ -312,6 +314,30 @@ class LocationRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       LocationScreen(location: $extra);
+}
+
+@TypedGoRoute<DeliveryLocationsRoute>(
+  name: kDeliveryLocationsRouteName,
+  path: '/deliveryLocations',
+)
+class DeliveryLocationsRoute extends GoRouteData {
+  final bool $extra;
+
+  DeliveryLocationsRoute({this.$extra = true});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      DeliveryLocationsScreen(showDrawer: $extra);
+}
+
+@TypedGoRoute<PickDeliveryLocationRoute>(
+  name: kPickDeliveryLocationRouteName,
+  path: '/pickDeliveryLocation',
+)
+class PickDeliveryLocationRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const PickDeliveryLocationScreen();
 }
 
 @riverpod
