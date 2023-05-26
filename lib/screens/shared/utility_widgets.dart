@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commercio/models/social_entry/social_entry.dart';
-import 'package:commercio/repositories/generic_repository.dart';
+import 'package:commercio/models/base_entity.dart';
 import 'package:commercio/state/editing/editing.dart';
 import 'package:commercio/state/locale.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';

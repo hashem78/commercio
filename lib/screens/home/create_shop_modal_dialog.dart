@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commercio/models/shop/shop.dart';
-import 'package:commercio/repositories/generic_repository.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/state/auth.dart';
 import 'package:commercio/state/locale.dart';
@@ -61,27 +61,25 @@ class _CreateShopModalDialogState extends ConsumerState<CreateShopModalDialog> {
                 final isFormValid = _formKey.currentState?.isValid ?? false;
                 if (!isFormValid) return;
 
-                final db = FireStoreContext<SShop>(collectionPath: 'shops');
+                final db = FirebaseFirestore.instance;
                 final name =
                     _formKey.currentState!.fields['name']!.value as String;
 
                 final encodedName = utf8.encode(name.toLowerCase());
                 final nameDigest = sha1.convert(encodedName);
+                final shopId = nameDigest.toString().toLowerCase();
 
-                final created = await db.create(
-                  SShop(
-                    nameDigest.toString().toLowerCase(),
-                    user.uid,
-                    name,
-                  ),
-                );
-                if (created) {
-                  if (mounted) context.pop();
-                } else {
+                final docRef = db.doc('/shops/$shopId');
+                final shop = await docRef.get();
+                if (shop.exists) {
                   _formKey.currentState?.fields['name']?.invalidate(
                     'A shop with this name already exists!',
                   );
+                  return;
                 }
+
+                await docRef.set(SShop(shopId, user.uid, name).toJson());
+                if (mounted) context.pop();
               },
             ),
           ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commercio/models/product_category/product_category.dart';
-import 'package:commercio/repositories/generic_repository.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/state/locale.dart';
 import 'package:crypto/crypto.dart';
@@ -67,23 +67,25 @@ class _AddCategoryDialogState extends ConsumerState<CreateCategoryDialog> {
 
                 final encodedName = utf8.encode(name.toLowerCase());
                 final nameDigest = sha1.convert(encodedName);
-                final db = FireStoreContext<ProductCategory>(
-                  collectionPath: '/shops/${widget.shopId}/categories',
-                );
+                final categoryId = nameDigest.toString().toLowerCase();
+                final db = FirebaseFirestore.instance;
 
-                final created = await db.create(
-                  ProductCategory(
-                    id: nameDigest.toString().toLowerCase(),
-                    category: name,
-                  ),
-                );
-                if (created) {
-                  if (mounted) context.pop();
-                } else {
+                final docRef =
+                    db.doc('/shops/${widget.shopId}/categories/$categoryId');
+                final category = await docRef.get();
+
+                if (category.exists) {
                   _formKey.currentState?.fields['name']?.invalidate(
                     'A category with this name already exists!',
                   );
+                  return;
                 }
+
+                await docRef.set(
+                  ProductCategory(id: categoryId, category: name).toJson(),
+                );
+
+                if (mounted) context.pop();
               },
             ),
           ),

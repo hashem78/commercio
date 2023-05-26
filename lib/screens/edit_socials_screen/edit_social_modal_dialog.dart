@@ -1,6 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commercio/models/social_entry/social_entry.dart';
-import 'package:commercio/models/user/user_model.dart';
-import 'package:commercio/repositories/generic_repository.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/state/auth.dart';
 import 'package:commercio/state/locale.dart';
@@ -57,17 +56,17 @@ class _EditSocialModalDialogState extends ConsumerState<EditSocialModalDialog> {
             true => IconButton(
                 icon: const Icon(Icons.close, color: Colors.red),
                 onPressed: () async {
-                  final dbContext = FireStoreContext<SUser>(
-                    collectionPath: 'users',
-                  );
+                  final db = FirebaseFirestore.instance;
 
-                  await dbContext.update(
-                    user.copyWith(
-                      socialEntriesMap: {
-                        ...user.socialEntriesMap,
-                      }..remove(widget.entryType),
-                    ),
-                  );
+                  await db.doc('/users/${user.id}').set(
+                        user
+                            .copyWith(
+                              socialEntriesMap: {
+                                ...user.socialEntriesMap,
+                              }..remove(widget.entryType),
+                            )
+                            .toJson(),
+                      );
                 },
               ),
             false => const IconButton(
@@ -90,21 +89,20 @@ class _EditSocialModalDialogState extends ConsumerState<EditSocialModalDialog> {
               onSubmitted: (newLink) async {
                 final isFormValid = _formKey.currentState?.isValid ?? false;
                 if (!isFormValid) return;
-                final dbContext = FireStoreContext<SUser>(
-                  collectionPath: 'users',
-                );
 
-                await dbContext.update(
-                  user.copyWith(
-                    socialEntriesMap: {
-                      ...user.socialEntriesMap,
-                      widget.entryType: SocialEntry(
-                        Uri.parse(newLink!),
-                        widget.entryType,
-                      ),
-                    },
-                  ),
-                );
+                final db = FirebaseFirestore.instance;
+
+                await db.doc('/users/${user.id}').update(
+                      user.copyWith(
+                        socialEntriesMap: {
+                          ...user.socialEntriesMap,
+                          widget.entryType: SocialEntry(
+                            Uri.parse(newLink!),
+                            widget.entryType,
+                          ),
+                        },
+                      ).toJson(),
+                    );
                 if (mounted) context.pop();
               },
             ),

@@ -7,14 +7,15 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import { onRequest } from "firebase-functions/v2/https";
+import {onRequest} from "firebase-functions/v2/https";
 
-import { getFirestore, FieldValue } from "firebase-admin/firestore";
-import { initializeApp } from "firebase-admin/app";
-import { v4 as uuidv4 } from "uuid";
+import {getFirestore, FieldValue} from "firebase-admin/firestore";
+import {initializeApp} from "firebase-admin/app";
+import {v4 as uuidv4} from "uuid";
 import {
   onDocumentDeleted,
 } from "firebase-functions/v2/firestore";
+import { setGlobalOptions } from "firebase-functions/v2/options";
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
@@ -24,10 +25,10 @@ import {
 // });
 initializeApp();
 const db = getFirestore();
-
+setGlobalOptions({maxInstances: 10});
 
 export const emptyCart = onRequest(
-  { timeoutSeconds: 15, cors: true, maxInstances: 10 },
+  {timeoutSeconds: 15, cors: true, maxInstances: 10},
   async (req, res): Promise<any> => {
     const body = req.body.data;
     const uid: string = body.uid;
@@ -72,31 +73,32 @@ export const emptyCart = onRequest(
         totalPrice: totalPrice,
         location: location,
       });
-      res.send({ data: {} }).end();
+      res.send({data: {}}).end();
     } catch (error) {
       console.log(error);
-      res.send({ data: { error: error } });
+      res.send({data: {error: error}});
     }
-
   });
 
+const onProductDeletedPath = "/shops/{shopId}/products/{productId}";
 
-export const onProductDeleted = onDocumentDeleted("/shops/{shopId}/products/{productId}", async (event) => {
-  const snap = event.data;
+export const onProductDeleted = onDocumentDeleted(
+  onProductDeletedPath, async (event) => {
+    const snap = event.data;
 
-  if (snap === undefined) return;
-  const { productId } = event.params;
+    if (snap === undefined) return;
+    const {productId} = event.params;
 
-  const usersCollectionRef = await db.collection('/users').listDocuments();
+    const usersCollectionRef = await db.collection("/users").listDocuments();
 
-  for (const docRef of usersCollectionRef) {
-    const doc = await docRef.get();
-    const user: any = doc.data();
-    const userId: string = user.id;
+    for (const docRef of usersCollectionRef) {
+      const doc = await docRef.get();
+      const user: any = doc.data();
+      const userId: string = user.id;
 
-    await db.doc(`/users/${userId}/likedProducts/${productId}`).delete();
-  }
-});
+      await db.doc(`/users/${userId}/likedProducts/${productId}`).delete();
+    }
+  });
 
 export const deleteShop = onRequest(async (req, res) => {
   const body = req.body.data;
@@ -106,5 +108,5 @@ export const deleteShop = onRequest(async (req, res) => {
 
   await db.recursiveDelete(shopRef);
 
-  res.send({ data: {} }).end();
+  res.send({data: {}}).end();
 });

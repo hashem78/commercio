@@ -3,6 +3,7 @@ import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,7 +35,7 @@ class PickLocationScreen extends ConsumerWidget {
         bottomCardShape: const RoundedRectangleBorder(),
         searchHintText: t.translations.general.startTypingToSearch,
         bottomCardTooltip: t.translations.general.tapOnMapToGetAddress,
-        canPopOnNextButtonTaped: true,
+        canPopOnNextButtonTaped: false,
         onNext: (GeocodingResult? result) {
           if (result == null) return;
 

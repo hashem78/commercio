@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:commercio/models/social_entry/social_entry.dart';
-import 'package:commercio/router/router.dart';
+import 'package:commercio/screens/profile/widgets/edit_socials_tile.dart';
+import 'package:commercio/screens/profile/widgets/social_entry_tiles_column.dart';
 import 'package:commercio/state/auth.dart';
-import 'package:commercio/state/editing/editing.dart';
 import 'package:commercio/state/locale.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,8 +11,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:commercio/screens/shared/scaffold.dart';
 import 'package:commercio/screens/shared/utility_widgets.dart';
 import 'package:commercio/state/user/user_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({
@@ -87,7 +83,7 @@ class ProfileScreen extends ConsumerWidget {
     );
 
     final socialEntryTiles = userAsyncValue.when(
-      data: (user) => SocialEntryTiles(
+      data: (user) => SocialEntryTilesColumn(
         entries: user.socialEntriesMap.values.toList(),
       ),
       error: errorWidget,
@@ -138,69 +134,6 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class EditSocialsTile extends ConsumerWidget {
-  const EditSocialsTile({
-    super.key,
-    required this.userId,
-  });
-
-  final String userId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isEditing = ref.watch(editingProvider);
-    final t = ref.watch(translationProvider).translations.profile;
-
-    return ListTile(
-      leading: const Icon(Icons.edit),
-      onTap: () => EditSocialsRoute(userId: userId).push(context),
-      enabled: isEditing,
-      title: Text(t.editSocialsButtonText),
-    );
-  }
-}
-
-class SocialEntryTiles extends HookConsumerWidget {
-  const SocialEntryTiles({
-    super.key,
-    required this.entries,
-  });
-  final List<SocialEntry> entries;
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: entries.map((e) => SocialEntryTile(entry: e)).toList(),
-    );
-  }
-}
-
-class SocialEntryTile extends HookConsumerWidget {
-  const SocialEntryTile({
-    super.key,
-    required this.entry,
-  });
-
-  final SocialEntry entry;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
-      onTap: () async {
-        try {
-          await launchUrl(entry.link, mode: LaunchMode.externalApplication);
-        } on PlatformException {
-          await launchUrlString(
-            entry.link.toString(),
-            mode: LaunchMode.externalApplication,
-          );
-        }
-      },
-      leading: socialIconFromEntryType(entry.type),
-      title: const Text('link'),
     );
   }
 }
