@@ -23,9 +23,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
+import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

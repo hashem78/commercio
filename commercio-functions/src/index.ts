@@ -15,7 +15,7 @@ import {v4 as uuidv4} from "uuid";
 import {
   onDocumentDeleted,
 } from "firebase-functions/v2/firestore";
-import { setGlobalOptions } from "firebase-functions/v2/options";
+import {setGlobalOptions} from "firebase-functions/v2/options";
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
